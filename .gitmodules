@@ -1,0 +1,9 @@
+[submodule "ckanext-harvest"]
+	path = ckanext-harvest
+	url = https://github.com/timotoots/ckanext-harvest
+[submodule "ckanext-datastorer"]
+	path = ckanext-datastorer
+	url = https://github.com/timotoots/ckanext-datastorer
+[submodule "ckanext-archiver"]
+	path = ckanext-archiver
+	url = https://github.com/timotoots/ckanext-archiver
