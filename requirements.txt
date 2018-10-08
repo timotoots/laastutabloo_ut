@@ -1,2 +1,10 @@
+celery==3.1.25
+kombu==3.0.37
+progressbar==2.3
+messytables==0.10
 -e git+https://github.com/okfn/ckanext-archiver.git#egg=ckanext-archiver
--e git+https://github.com/timotoots/ckanext-harvest.git#egg=ckanext-harvest
+celery==2.4.2
+kombu-sqlalchemy==1.1.0
+python-dateutil>=1.5
+pika==0.9.8
+redis==2.10.1
