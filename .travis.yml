@@ -9,6 +9,7 @@ before_install:
   - git checkout tags/ckan-2.8.1
   - cd contrib/docker
   - docker-compose up -d --build
+  - cd
 
 language: python
 python:
