@@ -11,6 +11,7 @@ before_install:
   - cd contrib/docker
   - docker-compose up -d --build
   - cd
+  - cd timotoots/laastutabloo
 
 language: python
 python:
