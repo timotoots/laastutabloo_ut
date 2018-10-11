@@ -11,7 +11,7 @@ before_install:
   - cd contrib/docker
   - docker-compose up -d --build
   - cd
-  - cd laastutabloo
+  - cd $TRAVIS_BUILD_DIR
 
 language: python
 python:
