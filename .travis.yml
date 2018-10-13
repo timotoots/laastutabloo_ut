@@ -2,7 +2,6 @@ sudo: required
 
 before_install:
   - cd
-  - sudo apt-get upgrade
   - sudo apt-get install python-dev postgresql-10 libpq-dev python-pip python-virtualenv git-core solr-jetty openjdk-8-jdk redis-server
   - sudo mkdir -p /usr/lib/ckan/default
   - sudo chown `whoami` /usr/lib/ckan/default
