@@ -36,7 +36,7 @@ before_install:
   - python setup.py develop
   - pip install -r requirements.txt
   - pip install -r dev-requirements.txt
-  - cd $TRAVIS_BUILD_DIR/ckanext-harvester
+  - cd $TRAVIS_BUILD_DIR/ckanext-harvest
   - pip install -r pip-requirements.txt --allow-all-external
   - pip install -r dev-requirements.txt --allow-all-external
   - python setup.py develop
@@ -48,6 +48,7 @@ before_install:
   - pip install mock
   - pip install factory
   - python setup.py develop
+  - cd $TRAVIS_BUILD_DIR
 
 language: python
 python:
