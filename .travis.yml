@@ -31,7 +31,23 @@ before_install:
   - paster db init -c /etc/ckan/default/development.ini
   - cd /usr/lib/ckan/default/src/ckan
   - paster serve /etc/ckan/default/development.ini &
-  - cd $TRAVIS_BUILD_DIR
+  - cd $TRAVIS_BUILD_DIR/ckanext-archiver
+  - pip install -e git+https://github.com/datagovuk/ckanext-report.git#egg=ckanext-report
+  - python setup.py develop
+  - pip install -r requirements.txt
+  - pip install -r dev-requirements.txt
+  - cd $TRAVIS_BUILD_DIR/ckanext-harvester
+  - pip install -r pip-requirements.txt --allow-all-external
+  - pip install -r dev-requirements.txt --allow-all-external
+  - python setup.py develop
+  - paster harvester initdb -c /etc/ckan/default/development.ini
+  - cd $TRAVIS_BUILD_DIR/ckanext-datastorer
+  - pip install -e git+git://github.com/ckan/ckanext-datastorer.git#egg=ckanext-datastorer
+  - pip install -r ckanext-datastorer/pip-requirements.txt
+  - pip install nose
+  - pip install mock
+  - pip install factory
+  - python setup.py develop
 
 language: python
 python:
