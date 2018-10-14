@@ -13,6 +13,7 @@ before_install:
   - pip install -r /usr/lib/ckan/default/src/ckan/requirements.txt
   - deactivate 
   - . /usr/lib/ckan/default/bin/activate
+  - sudo service postgresql start
   - psql -c 'create database ckan_default;' -U postgres
   - sudo mkdir -p /etc/ckan/default
   - sudo chown -R `whoami` /etc/ckan/
