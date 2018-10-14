@@ -20,7 +20,7 @@ before_install:
   - paster make-config ckan /etc/ckan/default/development.ini
   - sed -i 's/sqlalchemy.url = postgresql:\/\/ckan_default:pass@localhost\/ckan_default/sqlalchemy.url = postgresql:\/\/postgres@localhost\/ckan_default/g' /etc/ckan/default/development.ini
   - sed -i 's/ckan.site_url =/ckan.site_url = http:\/\/data.laastutabloo.ee/g' /etc/ckan/default/development.ini
-  - sed -i 's/#JETTY_HOST=127.0.0.1/JETTY_HOST=127.0.0.1/g' /etc/default/jetty8
+  - sudo sed -i 's/#JETTY_HOST=127.0.0.1/JETTY_HOST=127.0.0.1/g' /etc/default/jetty8
   - sudo sed -i 's/JETTY_PORT=8080/JETTY_PORT=8983/g' /etc/default/jetty8
   - sudo service jetty8 restart
   - sudo mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
