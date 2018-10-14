@@ -40,7 +40,6 @@ before_install:
   - pip install -r pip-requirements.txt
   - pip install -r dev-requirements.txt
   - python setup.py develop
-  - paster harvester initdb -c /etc/ckan/default/development.ini
   - cd $TRAVIS_BUILD_DIR/ckanext-datastorer
   - pip install -e git+git://github.com/ckan/ckanext-datastorer.git#egg=ckanext-datastorer
   - pip install -r pip-requirements.txt
