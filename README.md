@@ -1,5 +1,6 @@
 # Laastutabloo
 [![Build Status](https://travis-ci.com/timotoots/laastutabloo.svg?branch=master)](https://travis-ci.com/timotoots/laastutabloo)
+
 This is a joint project between Timo Toots and the Univerity of Tartu.
 The project is an art project aiming to show local information about Estonian villages, towns and cities on a wooden display at the Estonian National Museum in Tartu.
 
