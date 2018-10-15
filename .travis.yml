@@ -71,7 +71,7 @@ after_success:
 - eval "$(ssh-agent -s)"
 - chmod 600 deploy_rsa
 - ssh-add deploy_rsa
-- git remote add production ssh://root@laastutabloo.ee:22/root
+- git remote add production ssh://root@laastutabloo.ee:22/root/laastutabloo
 - git pull origin
 - git push production master
 
