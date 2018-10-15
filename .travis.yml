@@ -50,6 +50,7 @@ before_install:
   - pip install factory
   - python setup.py develop
   - cd $TRAVIS_BUILD_DIR
+  - pip install pytest
 
 language: python
 python:
