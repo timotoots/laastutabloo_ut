@@ -1,22 +1,29 @@
+# Ubuntu 16.04
 dist: xenial
 sudo: required
 
+# Install CKAN
 before_install:
   - bash bin/travis-build.bash
 
+# Programming language
 language: python
 python:
   - "2.7"
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
 
+# Tests
 script:
   - python -m pytest tests/
 
+# SSH
 addons:
   ssh_known_hosts: laastutabloo.ee
 
+# Deploy
 after_success:
 - cd $TRAVIS_BUILD_DIR
 - openssl aes-256-cbc -K $encrypted_0d6304408894_key -iv $encrypted_0d6304408894_iv -in deploy_rsa.enc -out deploy_rsa -d
@@ -26,6 +33,3 @@ after_success:
 - git remote add production ssh://root@laastutabloo.ee:22/root/laastutabloo
 - git pull origin
 - git push production master
-
-
-
