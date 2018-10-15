@@ -11,6 +11,7 @@ before_install:
   - pip install setuptools==36.1
   - pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.8.1#egg=ckan'
   - pip install -r /usr/lib/ckan/default/src/ckan/requirements.txt
+  - python setup.py develop
   - deactivate 
   - . /usr/lib/ckan/default/bin/activate
   - sudo service postgresql start
@@ -57,7 +58,7 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - pytest tests/pytests_test.py
+  - python -m pytest tests/
 
 addons:
   ssh_known_hosts: laastutabloo.ee
