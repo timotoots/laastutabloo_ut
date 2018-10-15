@@ -16,3 +16,6 @@ Overview of the project is available [here](https://github.com/timotoots/laastut
 
 ## Project structure
 Here you can see the approximate structure of the software: ![Laastutabloo structure](https://i.imgur.com/xs6x8BM.jpg)
+
+## URL
+http://data.laastutabloo.ee
