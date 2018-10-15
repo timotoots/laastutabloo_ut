@@ -2,7 +2,7 @@ dist: xenial
 sudo: required
 
 before_install:
-  - bash travis_install.sh
+  - bash bin/travis-build.bash
 
 language: python
 python:
