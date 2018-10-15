@@ -71,8 +71,7 @@ after_success:
 - chmod 600 /tmp/deploy_rsa
 - ssh-add /tmp/deploy_rsa
 - git remote add production laastutabloo.ee
-- git push production 
-
+- git push production master
 
 
 
