@@ -1,19 +1,34 @@
 import ckan.plugins as plugins
-import ckan.plugins.toolkit as toolkit
-import ujson
-import urllib2
+import ckan.plugins.toolkit as tk
+import ckan.logic.action as action
+import filter
 
 class ConverterPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IConfigurer)
-
-    # IConfigurer
-
-    def update_config(self, config_):
-        toolkit.add_template_directory(config_, 'templates')
-        toolkit.add_public_directory(config_, 'public')
-        toolkit.add_resource('fanstatic', 'converter')
+    plugins.implements(plugins.IResourceController)
     
-    def get():
-        request = urllib2.Request('http:/data.laastutabloo.ee/api/action/user_list')
-        response_dict = ujson.loads(urllib2.urlopen(request, '{}').read())
-        print response_dict
+    def before_create(self, context, resource):
+	filter.filter(ressource)
+
+    def after_create(self, context, resource):
+        print context
+        print
+        print resource
+        
+
+    def before_update(self, context, current, resource):
+        pass
+
+    def after_update(self, context, resource):
+        pass
+
+    def before_delete(self, context, resource, resources):
+        pass
+
+    def after_delete(self, context, resources):
+        pass
+
+    def before_show(self, resource):
+        pass
+        #print resource
+        
+
