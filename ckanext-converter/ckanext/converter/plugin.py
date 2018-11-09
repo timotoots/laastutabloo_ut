@@ -1,34 +1,37 @@
 import ckan.plugins as plugins
-import ckan.plugins.toolkit as tk
-import ckan.logic.action as action
 import filter
 
 class ConverterPlugin(plugins.SingletonPlugin):
+    
+    # Has to implement all the methods for IResourceController
     plugins.implements(plugins.IResourceController)
     
-    def before_create(self, context, resource):
-	filter.filter(ressource)
-
+    # Filter received resource after upload
     def after_create(self, context, resource):
-        print context
-        print
-        print resource
+        print filter.filter(resource)
+    
+    # Not needed, so not changed
+    def before_create(self, context, resource):
+	    pass
         
-
+    # Not needed, so not changed
     def before_update(self, context, current, resource):
         pass
-
+    
+    # Not needed, so not changed
     def after_update(self, context, resource):
         pass
-
+    
+    # Not needed, so not changed
     def before_delete(self, context, resource, resources):
         pass
-
+    
+    # Not needed, so not changed
     def after_delete(self, context, resources):
         pass
 
+    # Not needed, so not changed
     def before_show(self, resource):
         pass
-        #print resource
         
 
