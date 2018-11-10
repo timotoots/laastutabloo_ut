@@ -34,6 +34,8 @@ def xml_to_csv(xml):
     Resident_data = open('/tmp/ResidentData.csv', 'w')
     csvwriter = csv.writer(Resident_data)
     for i in root:
+        for j in i:
+            j=j.text
         csvwriter.writerow(i)
     return open('/tmp/ResidentData.csv', 'r').read(100)
 
