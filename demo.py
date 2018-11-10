@@ -8,11 +8,11 @@ import json
 import os
 import hashlib
 
-api_key = "7ca5774c-1ffb-43ee-a2cd-f24bf99e1d72"
-host = "http://data.laastutabloo.ee"
+api_key = "3a3e6c64-9d9a-4ee7-99b0-fd2d26e399da"
+host = "http://127.0.0.1:5000"
 org_id = "testorg"
 
-test_file = "/home/user/Downloads/liiklusjarelevalve2.csv"
+#test_file = "/home/user/Downloads/liiklusjarelevalve2.csv"
 test_link = "https://www.spordiregister.ee/opendata/files/spordikoolid.xml"
 
 def get_hash(file):
@@ -127,56 +127,13 @@ raw_input()
 
 # Upload resources
 print("\nUploading new resources")
-print("From file")
-resp = upload_file(host, api_key, "uploadtest", "CSV", dataset_id, "testorg", test_file)
-print("success: " + str(json.loads(resp.content)["success"]))
-raw_input()
+#print("From file")
+#resp = upload_file(host, api_key, "uploadtest", "CSV", dataset_id, "testorg", test_file)
+#print("success: " + str(json.loads(resp.content)["success"]))
+#raw_input()
 print("From link")
 resp = upload_file_from_link(host, api_key, "linktest.xml", "XML", dataset_id, "testorg", test_link)
 print("success: " + str(json.loads(resp.content)["success"]))
-raw_input()
-
-# Get package
-print("\nDownloading package from server")
-package_id = json.loads(resp.content)["result"]["id"]
-resp = get_package(host, api_key, package_id)
-link = json.loads(resp.content)["result"]["url"]
-download_file(link, "linktest_from_server.xml")
-print("success: " + str(json.loads(resp.content)["success"]))
-raw_input()
-
-# Compare resources
-print("\nComparing source package with server package")
-download_file(test_link, "linktest_from_source.xml")
-comp = compare_files("linktest_from_source.xml", "linktest_from_server.xml")
-# Should be true
-print("Hashes match: " + str(comp))
-os.remove("linktest_from_source.xml")
-raw_input()
-
-# Update package
-print("\nEditing package file")
-with open("linktest_from_server.xml", "a") as f:
-	f.write("This is different now.")
-print("Updating package")
-resp = update_package(host, api_key, package_id, "linktest_from_server.xml")
-os.remove("linktest_from_server.xml")
-print("success: " + str(json.loads(resp.content)["success"]))
-raw_input()
-
-# Compare again
-print("\nComparing source package with server package")
-print("Downloading from server")
-download_file(link, "linktest_from_server.xml")
-print("Downloading from source")
-download_file(test_link, "linktest_from_source.xml")
-comp = compare_files("linktest_from_source.xml", "linktest_from_server.xml")
-# Should be false
-print("Hashes match: " + str(comp))
-if comp == False:
-	print("Source package does not match the server package. Updating..")
-	resp = update_package(host, api_key, package_id, "linktest_from_source.xml")
-	print("success: " + str(json.loads(resp.content)["success"]))
 raw_input()
 
 # Delete resources
