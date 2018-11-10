@@ -9,6 +9,8 @@ class ExtrafieldsPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
 	def _modify_package_schema(self, schema):
 		schema['resources'].update({
 			'update_interval' : [ tk.get_validator('ignore_missing'),
+			tk.get_converter('convert_to_extras')],
+			'source_url' : [ tk.get_validator('ignore_missing'),
 			tk.get_converter('convert_to_extras')]
 		})
 		return schema
@@ -17,6 +19,8 @@ class ExtrafieldsPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
 		schema = super(ExtrafieldsPlugin, self).show_package_schema()
 		schema['resources'].update({
 			'update_interval' : [ tk.get_validator('ignore_missing'),
+			tk.get_converter('convert_to_extras')],
+			'source_url' : [ tk.get_validator('ignore_missing'),
 			tk.get_converter('convert_to_extras')]
 		})
 		return schema
