@@ -12,7 +12,7 @@ class ConverterPlugin(plugins.SingletonPlugin):
     
     # Not needed, so not changed
     def before_create(self, context, resource):
-	    pass
+        pass
         
     # Not needed, so not changed
     def before_update(self, context, current, resource):
