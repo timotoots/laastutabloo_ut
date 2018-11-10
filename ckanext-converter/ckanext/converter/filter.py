@@ -52,5 +52,6 @@ def xml_to_csv(file_id, file_path):
             if j.text: 
                 row.append(j.text.encode('utf-8'))
         csvwriter.writerow(row)
-    return '/tmp/' + file_id + '.csv'
+    return FILESTORAGE_PATH + "/converted/" + file_id[:3] + "/" +\
+                file_id[3:6] + "/" + file_id[6:]
 

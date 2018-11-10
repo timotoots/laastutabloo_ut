@@ -8,7 +8,7 @@ class ConverterPlugin(plugins.SingletonPlugin):
     
     # Filter received resource after upload
     def after_create(self, context, resource):
-        print filter.filter(resource)
+        filter.filter(resource)
     
     # Not needed, so not changed
     def before_create(self, context, resource):
