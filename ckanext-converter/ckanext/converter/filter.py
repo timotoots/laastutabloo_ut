@@ -13,29 +13,45 @@ def filter(resource):
     file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" +\
                 file_id[3:6] + "/" + file_id[6:]
     
+    # Validate()
+    # ----------------------------------------
+    
     # Switch-Case for filetype differenciation
     if file_type=='XML':
-        return xml_to_csv(file_path)
+        return xml_to_csv(file_id, file_path)
     elif file_type=='JSON':
-        return json_to_csv(file_path)
+        return json_to_csv(file_id, file_path)
     elif file_type=='CSV':
         return file_path
     else:
 	    print "error"
+	        
+    # ----------------------------------------
+    # Convert()
+    # ----------------------------------------
+    # Complete()
+    # ----------------------------------------
+    # Validate()
+    # ----------------------------------------
+    
+
 
 # Convert JSON to CSV
-def json_to_csv(json):
-    return json
+def json_to_csv(file_id, file_path):
+    return file_path
 
 # Convert XML to CSV
-def xml_to_csv(xml):
-    tree = ET.parse(xml)
+def xml_to_csv(file_id, file_path):
+    tree = ET.parse(file_path)
     root = tree.getroot()
-    Resident_data = open('/tmp/ResidentData.csv', 'w')
+    Resident_data = open('/tmp/' + file_id + '.csv', 'w')
     csvwriter = csv.writer(Resident_data)
     for i in root:
+        row = []
         for j in i:
-            j=j.text
-        csvwriter.writerow(i)
-    return open('/tmp/ResidentData.csv', 'r').read(100)
+            if j.text: 
+                row.append(j.text.encode('utf-8'))
+        csvwriter.writerow(row)
+    return FILESTORAGE_PATH + "/converted/" + file_id[:3] + "/" +\
+                file_id[3:6] + "/" + file_id[6:]
 
