@@ -12,8 +12,12 @@
       {{ form.input('name', id='field-name', label=_('Name'), placeholder=_('eg. January 2011 Gold Prices'), value=data.name, error=errors.name, classes=['control-full']) }}
     {% endblock %}
 
-  {% block basic_fields_update_interval %}
+    {% block basic_fields_update_interval %}
       {{ form.input('update_interval', label=_('Update Interval'), id='field-update_interval', placeholder=_('hourly/daily/weekly/monthly/annually'), value=data.update_interval, error=errors.update_interval, classes=['control-medium']) }}
+    {% endblock %}
+
+    {% block basic_fields_source_url %}
+      {{ form.input('source_url', label=_('Source URL'), id='field-source_url', placeholder=_('www.website.com/resource'), value=data.source_url, error=errors.source_url, classes=['control-medium']) }}
     {% endblock %}
 
     {% block basic_fields_description %}
