@@ -24,8 +24,8 @@ setup(
     url='https://github.com/timotoots/laastutabloo',
 
     # Author details
-    author='''Laastutabloo''',
-    author_email='''''',
+    author='''Bruno Produit''',
+    author_email='''produit@ut.ee''',
 
     # Choose your license
     license='AGPL',
