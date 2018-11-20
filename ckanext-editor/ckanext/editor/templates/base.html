@@ -1,22 +1,16 @@
-<style>
-
-table, th, td {
-    border: 1px solid black;
-}
-</style>
-
+{% ckan_extends %}
 {% block page %}
 {% block Column %}
 <h2> Column selection: </h2><br>
 Select columns from the original<br>
 
-<input type="submit" name="submit_button" value="Create columns"><br>
+<button type="button" class="btn btn-primary">Create columns</button>
 {% endblock %}
 <hr>
 {% block Script %}
 <h2> Custom script </h2><br>
 
-<input type="submit" name="submit_button" value="Create columns"><br>
+<button type="button" class="btn btn-primary">Create columns</button>
 {% endblock %}
 <hr>
 {% block Type %}
@@ -41,6 +35,6 @@ Map columns to types
 
 {% print tags %}
 
-
+<button type="button" class="btn btn-primary">Create columns</button>
 {% endblock %}
 
