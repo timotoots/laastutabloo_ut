@@ -77,8 +77,10 @@ class EditorPlugin(p.SingletonPlugin):
         tree = etree.ElementTree(root)
         treeview = ""
         tag_name = ""
+        tag_list = []
         
         for tag in root.iter():
+          tag_list.append(tag.tag)
           path = tree.getpath(tag)
           path = path.replace('/', '    ')
           spaces = Counter(path)
@@ -86,5 +88,5 @@ class EditorPlugin(p.SingletonPlugin):
           tag_name = ' ' * (spaces[' '] - 4) + tag_name
           treeview += tag_name + "\n"
         
-        return {'root': root, 'tree': tree, 'treeview': treeview}
+        return {'root': root, 'tree': tree, 'treeview': treeview, 'tag_list': tag_list}
 
