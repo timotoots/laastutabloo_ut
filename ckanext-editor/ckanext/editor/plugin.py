@@ -7,6 +7,7 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 
 from lxml import etree
+from collections import Counter
 from ckan.common import config
 import re
 FILESTORAGE_PATH = config.get('ckan.storage_path') 
@@ -72,16 +73,20 @@ class EditorPlugin(p.SingletonPlugin):
         filetype = resource["type"]
         file_id = resource['id']
         file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" + file_id[3:6] + "/" + file_id[6:]
-        root = etree.fromstring(open(file_path, 'r').read())
+        root = etree.fromstring(open(file_path, 'r').read())        
         tree = etree.ElementTree(root)
+        treeview = ""
+        tag_name = ""
+        tag_list = []
         
-        columns = []
-        tags = []
-        for tag in root.iter(): 
-            columns.append(tree.getpath(tag))
-            tags.append(tag.tag)
-        columns = list(set(columns))
-        tags = list(set(tags)) 
-               
-        return {'root': root, 'tree': tree, 'columns': columns, 'tags': tags}
+        for tag in root.iter():
+          tag_list.append(tag.tag)
+          path = tree.getpath(tag)
+          path = path.replace('/', '    ')
+          spaces = Counter(path)
+          tag_name = path.split()[-1].split('[')[0]
+          tag_name = ' ' * (spaces[' '] - 4) + tag_name
+          treeview += tag_name + "\n"
+        
+        return {'root': root, 'tree': tree, 'treeview': treeview, 'tag_list': tag_list}
 
