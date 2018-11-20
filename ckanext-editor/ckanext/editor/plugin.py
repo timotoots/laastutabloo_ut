@@ -49,6 +49,7 @@ class EditorPlugin(p.SingletonPlugin):
         '''
         toolkit.add_public_directory(config, 'public')
         toolkit.add_template_directory(config, 'templates')
+        toolkit.add_resource('fanstatic', 'editor')
         
     def can_view(self, data_dict):
         resource = data_dict['resource']
@@ -59,7 +60,7 @@ class EditorPlugin(p.SingletonPlugin):
             return False
    
     def view_template(self, context, data_dict):
-        return 'editor.html'
+        return 'base.html'
 
     def get_helpers(self):
         return {

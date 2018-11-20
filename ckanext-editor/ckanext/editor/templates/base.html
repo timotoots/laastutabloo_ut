@@ -1,0 +1,59 @@
+{% ckan_extends %}
+{% block page %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<style>
+html {
+  font-size: 100%;
+}
+body {background-image: none}
+</style>
+
+<div class="container-fluid bg-white border rounded">
+  <h2> Column selection </h2>
+  Select columns from the original:
+  <div class="container-fluid border border-primary rounded">
+      <pre><code>Test</code></pre>
+  </div>
+  <br>
+  <button type="button" class="btn btn-primary">Create columns</button>
+</div>
+
+<br>
+
+<div class="container-fluid border rounded">
+  <h2> Custom script </h2>
+  <div class="container-fluid bg-white border border-primary rounded">
+    <pre><code>Test</code></pre>
+  </div>
+  <br>
+  <button type="button" class="btn btn-primary">Create columns</button>
+</div>
+
+<br>
+
+<div class="container-fluid border rounded">
+  <h2> Column types </h2>
+  Map columns to types
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Original column name</th>
+        <th scope="col">Standard column name</th>
+        <th scope="col">Column type</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in tags %}
+        <tr>
+          <td scope="row"> {{ i }} </td>
+          <td> AA </td>
+          <td> string </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<button type="button" class="btn btn-primary">Create columns</button>
+{% endblock %}
