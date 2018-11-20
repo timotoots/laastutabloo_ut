@@ -9,7 +9,7 @@ html {
 body {background-image: none}
 </style>
 
-<div class="container-fluid bg-white border rounded">
+<div class="container-fluid bg-white border rounded p-3">
   <h2> Column selection </h2>
   Select columns from the original:
   <div class="container-fluid border border-primary rounded">
@@ -21,7 +21,7 @@ body {background-image: none}
 
 <br>
 
-<div class="container-fluid border rounded">
+<div class="container-fluid border rounded p-3">
   <h2> Custom script </h2>
   <div class="container-fluid bg-white border border-primary rounded">
     <pre><code>Test</code></pre>
@@ -32,7 +32,7 @@ body {background-image: none}
 
 <br>
 
-<div class="container-fluid border rounded">
+<div class="container-fluid border rounded p-3">
   <h2> Column types </h2>
   Map columns to types
   <table class="table">
@@ -47,8 +47,26 @@ body {background-image: none}
       {% for i in tags %}
         <tr>
           <td scope="row"> {{ i }} </td>
-          <td> AA </td>
-          <td> string </td>
+          <td> 
+             <div class="form-group">
+              <select class="form-control" id="sel1">
+                <option>lat</option>
+                <option>lon</option>
+                <option>name</option>
+                <option>url</option>
+              </select>
+            </div> 
+          </td>
+          <td>
+            <div class="form-group">
+              <select class="form-control" id="sel1">
+                <option>int</option>
+                <option>string</option>
+                <option>bool</option>
+                <option>float</option>
+              </select>
+            </div> 
+          </td>
         </tr>
       {% endfor %}
     </tbody>
