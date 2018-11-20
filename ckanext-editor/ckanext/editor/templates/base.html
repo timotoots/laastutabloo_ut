@@ -13,9 +13,7 @@ body {background-image: none}
   <h2> Column selection </h2>
   Select columns from the original:
   <div class="container-fluid border border-primary rounded">
-      <pre><code>{% for i in root.findall("*") %}
-      {% print i.tag %} 
-      {% endfor %}</code></pre>
+      <pre><code>{% print treeview %}</code></pre>
   </div>
   <br>
   <button type="button" class="btn btn-primary">Create columns</button>
