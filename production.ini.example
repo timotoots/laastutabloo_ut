@@ -101,7 +101,7 @@ solr_url = http://127.0.0.1:8983/solr
 #       Add ``datapusher`` to enable DataPusher
 #		Add ``resource_proxy`` to enable resorce proxying and get around the
 #		same origin policy
-ckan.plugins = stats converter datastore datapusher editor text_view
+ckan.plugins = stats converter extrafields datastore datapusher editor text_view
 
 # Define which views should be created by default
 # (plugins must be loaded in ckan.plugins)
