@@ -18,14 +18,13 @@ natural_number_validator = p.toolkit.get_validator('natural_number_validator')
 Invalid = p.toolkit.Invalid
 
 def walk(root): 
-    res = ""
-    if list(root) != []:
-        res += '<li><span class="caret">' + root.tag + '</span><ul class="nested">'
-        for i in list(root):
-            res += "<li>" + i.tag + "</li>"
-            if isinstance(i, etree._Element):
-                res += walk(i)
-        res += "</li></ul>" 
+    res = '<li>'+ root.tag + '<ul class="nested">'
+    for i in list(root):
+        if list(i) != []:
+            res += walk(i)
+        else:
+          res += "<li>" + i.tag + "</li>"
+    res += "</li></ul>" 
     return res
 
 
