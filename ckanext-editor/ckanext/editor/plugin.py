@@ -19,14 +19,13 @@ Invalid = p.toolkit.Invalid
 
 def walk(root): 
     res = ""
-    if list(root) == []:
-        res += i.tag + "\n"
-    else:
+    if list(root) != []:
+        res += '<li><span class="caret">' + root.tag + '</span><ul class="nested">'
         for i in list(root):
-            if list(i)==[]:
-                res += i.tag + "\n"
-            else:
-                walk(i)
+            res += "<li>" + i.tag + "</li>"
+            if isinstance(i, etree._Element):
+                res += walk(i)
+        res += "</li></ul>" 
     return res
 
 
@@ -78,19 +77,11 @@ class EditorPlugin(p.SingletonPlugin):
         root = etree.fromstring(open(file_path, 'r').read())        
         tree = etree.ElementTree(root)
         treeview = ""
-        tag_name = ""
         tag_list = []
                 
         treeview = walk(tree.getroot())
         for tag in root.iter():
-            tag_list.append(tag.tag)
-            path = tree.getpath(tag)
-            path = path.replace('/', '    ')
-            spaces = Counter(path)
-            tag_name = path.split()[-1].split('[')[0]
-            tag_name = ' ' * (spaces[' '] - 4) + tag_name
-            treeview += tag_name + "<ul>"
-        
-        treeview = treeview.replace("\n","<ul>")
+          tag_list.append(tag.tag)
+          
         return {'root': root, 'tree': tree, 'treeview': Markup(treeview), 'tag_list': tag_list}
 
