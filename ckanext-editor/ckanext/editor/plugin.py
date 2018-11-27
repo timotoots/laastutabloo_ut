@@ -17,14 +17,16 @@ ignore_empty = p.toolkit.get_validator('ignore_empty')
 natural_number_validator = p.toolkit.get_validator('natural_number_validator')
 Invalid = p.toolkit.Invalid
 
-def walk(root): 
-    res = '<li>'+ root.tag + '<ul class="nested">'
+def walk(root, level=0): 
+    res = '<li><input type="checkbox" class="form-check-input" id=' + root.tag + str(level) +'>' + '<label class="form-check-label" for=' + root.tag + str(level) + '>  ' + root.tag + ' </label><ul class="nested">'
     for i in list(root):
         if list(i) != []:
-            res += walk(i)
+            res += walk(i, level + 1)
         else:
-          res += "<li>" + i.tag + "</li>"
-    res += "</li></ul>" 
+          res += '<li><input type="checkbox" class="form-check-input" id=' + root.tag + str(level) + i.tag + '>   ' + '<label class="form-check-label" for=' + root.tag + str(level) + i.tag + '>  ' + i.tag + '</label></li>'
+
+    res += "</li></ul>"
+     
     return res
 
 
