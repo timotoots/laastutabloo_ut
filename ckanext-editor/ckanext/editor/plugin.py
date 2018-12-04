@@ -17,7 +17,7 @@ ignore_empty = p.toolkit.get_validator('ignore_empty')
 natural_number_validator = p.toolkit.get_validator('natural_number_validator')
 Invalid = p.toolkit.Invalid
 
-def walk(root, level=0): 
+def walk(root, level=0):
     res = '<li><input type="checkbox" class="form-check-input" id=' + root.tag + str(level) +'>' + '<label class="form-check-label" for=' + root.tag + str(level) + '>  ' + root.tag + ' </label><ul class="nested">'
     for i in list(root):
         if list(i) != []:
