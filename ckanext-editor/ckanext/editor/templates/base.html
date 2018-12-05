@@ -4,9 +4,9 @@
 
 {######################### HTML #########################}
 
-<------------------------ Imports ----------------------->
+<!------------------------ Imports ----------------------->
 
-<- CSS ->
+<!-- CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 <style>
@@ -16,11 +16,11 @@ html {
 body {background-image: none}
 </style>
 
-<- JS ->
+<!-- JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 <script>
-  var checked = [];
+  var schema = [];
   function getCheckedBoxes() {
     var treeview = document.getElementById("treeview");
     var ul = treeview.getElementsByTagName("ul");
@@ -30,10 +30,10 @@ body {background-image: none}
         var temp = [];
         temp.push(list[j].childNodes[0].checked);
         temp.push(list[j].innerText);
-        checked.push(temp);
+        schema.push(temp);
       }
     }
-    return checked;
+    return schema;
   }
   function term() {
     var input = document.getElementById("input-script");
@@ -51,7 +51,7 @@ body {background-image: none}
 </script>
 
 
-<------------------------ Main ----------------------->
+<!------------------------ Main ----------------------->
 
 <div id="jstree_demo_div"></div>
 <div class="container-fluid bg-white border rounded p-3">
