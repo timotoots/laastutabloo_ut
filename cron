@@ -1,0 +1,3 @@
+# Change paths for update.py etc..
+0 * * * * cd /home/user/ && usr/bin/python /home/user/update.py >> /home/user/update_log.log
+

@@ -24,7 +24,7 @@ def filter(resource):
     elif file_type=='CSV':
         return file_path
     else:
-	    print "error"
+	print "error"
 	        
     # ----------------------------------------
     # Convert()
@@ -44,7 +44,7 @@ def json_to_csv(file_id, file_path):
 def xml_to_csv(file_id, file_path):
     tree = ET.parse(file_path)
     root = tree.getroot()
-    Resident_data = open('/tmp/' + file_id + '.csv', 'w')
+    Resident_data = open(FILESTORAGE_PATH + "/converted/" + file_id, 'w')
     csvwriter = csv.writer(Resident_data)
     for i in root:
         row = []
@@ -52,6 +52,5 @@ def xml_to_csv(file_id, file_path):
             if j.text: 
                 row.append(j.text.encode('utf-8'))
         csvwriter.writerow(row)
-    return FILESTORAGE_PATH + "/converted/" + file_id[:3] + "/" +\
-                file_id[3:6] + "/" + file_id[6:]
+    return FILESTORAGE_PATH + "/converted/" + file_id
 
