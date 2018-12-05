@@ -1,30 +1,36 @@
 {% ckan_extends %}
 {% block page %}
-
+<meta charset="UTF-8">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style>
-html {
-  font-size: 100%;
-}
-body {background-image: none}
-</style>
+  html {
+    font-size: 100%;
+  }
+  body {background-image: none}
 
+</style>
 <div class="container-fluid bg-white border rounded p-3">
   <h2> Column selection </h2>
   Select columns from the original:
-  <div class="container-fluid border border-primary rounded">
-      <pre><code>{% print treeview %}</code></pre>
+  <div class="container-fluid border border-primary rounded" id="treeview">
+    {% print treeview %}
   </div>
   <br>
-  <button type="button" class="btn btn-primary">Create columns</button>
+  <button type="button" class="btn btn-primary" onclick=getCheckedBoxes();>Create columns</button>
 </div>
+
 
 <br>
 
 <div class="container-fluid border rounded p-3">
   <h2> Custom script </h2>
-  <div class="container-fluid bg-white border border-primary rounded">
-    <pre><code>Test</code></pre>
+  <div class="container-fluid border rounded p-3">
+    <div class="form-group">
+      <input type="text" class="form-control bg-white border border-primary rounded" id="input-script">
+      <p id="output-script"></p>
+    </div>
+    <button type="button" class="btn btn-secondary" onclick=term();>Run</button>
   </div>
   <br>
   <button type="button" class="btn btn-primary">Create columns</button>
@@ -45,29 +51,29 @@ body {background-image: none}
     </thead>
     <tbody>
       {% for i in tag_list %}
-        <tr>
-          <td scope="row"> {{ i }} </td>
-          <td> 
-             <div class="form-group">
-              <select class="form-control" id="sel1">
-                <option>lat</option>
-                <option>lon</option>
-                <option>name</option>
-                <option>url</option>
-              </select>
-            </div> 
-          </td>
-          <td>
-            <div class="form-group">
-              <select class="form-control" id="sel1">
-                <option>int</option>
-                <option>string</option>
-                <option>bool</option>
-                <option>float</option>
-              </select>
-            </div> 
-          </td>
-        </tr>
+      <tr>
+        <td scope="row"> {{ i }} </td>
+        <td>
+          <div class="form-group">
+            <select class="form-control" id="sel1">
+              <option>lat</option>
+              <option>lon</option>
+              <option>name</option>
+              <option>url</option>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <select class="form-control" id="sel1">
+              <option>int</option>
+              <option>string</option>
+              <option>bool</option>
+              <option>float</option>
+            </select>
+          </div>
+        </td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
@@ -75,3 +81,26 @@ body {background-image: none}
 
 <button type="button" class="btn btn-primary">Create columns</button>
 {% endblock %}
+
+<script>
+  var checked = [];
+  function getCheckedBoxes() {
+    var treeview = document.getElementById("treeview");
+    var ul = treeview.getElementsByTagName("ul");
+    for (var i = 0; i < ul.length; ++i) {
+      var list = ul[i].getElementsByTagName("li");
+      for (var j = 0; j < list.length; ++j) {
+        var temp = [];
+        temp.push(list[j].childNodes[0].checked);
+        temp.push(list[j].innerText);
+        checked.push(temp);
+      }
+    }
+    return checked;
+  }
+  function term() {
+    var input = document.getElementById("input-script");
+    var output = eval(input.value)
+    document.getElementById('output-script').innerHTML = output;
+  }
+</script>
