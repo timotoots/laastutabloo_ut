@@ -13,32 +13,38 @@ body {background-image: none}
 <div class="container-fluid bg-white border rounded p-3">
   <h2> Column selection </h2>
   Select columns from the original:
-  <div class="container-fluid border border-primary rounded" id="aaa">
+  <div class="container-fluid border border-primary rounded" id="treeview">
   {% print treeview %}
   </div>
   <br>
-  <button type="button" class="btn btn-primary">Create columns</button>
+  <button type="button" class="btn btn-primary" onclick=getCheckedBoxes();>Create columns</button>
 </div>
 <script>
-window.onload = function () {
-    var aaa = document.getElementById("aaa");
-    var bbb = aaa.getElementsByTagName("ul");
-    for (var i = 0; i < bbb.length; ++i) {
-      var list = bbb[i].getElementsByTagName("li");
-      for (var i = 0; i < list.length; ++i) {
-        console.log(list[i].id)
-        console.log(list[i].innerText)
-    }}  
-};
+function getCheckedBoxes() {
+    var checked = [];
+    var treeview = document.getElementById("treeview");
+    var ul = treeview.getElementsByTagName("ul");
+    for (var i = 0; i < ul.length; ++i) {
+      var list = ul[i].getElementsByTagName("li");
+      for (var j = 0; j < list.length; ++j) {
+        var temp = [];
+        temp.push(list[j].childNodes[0].checked);
+        temp.push(list[j].innerText);
+        checked.push(temp);
+      }
+    }
+    console.log(checked);
+}
 </script>
 
 <br>
 
 <div class="container-fluid border rounded p-3">
   <h2> Custom script </h2>
-  <div class="container-fluid bg-white border border-primary rounded">
-    <pre><code>Test</code></pre>
-  </div>
+  <div class="form-group">
+  <label for="script">Test</label>
+  <input type="text" class="form-control bg-white border border-primary rounded" id="script">
+</div>
   <br>
   <button type="button" class="btn btn-primary">Create columns</button>
 </div>

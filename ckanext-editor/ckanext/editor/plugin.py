@@ -18,7 +18,7 @@ natural_number_validator = p.toolkit.get_validator('natural_number_validator')
 Invalid = p.toolkit.Invalid
 
 def walk(root, level=0):
-    res = '<li><input type="checkbox" class="form-check-input" id=' + root.tag + str(level) +'>' + '<label class="form-check-label" for=' + root.tag + str(level) + '>  ' + root.tag + ' </label><ul class="nested">'
+    res = '<li><input type="ccheckbox" class="form-check-input" id=' + root.tag + str(level) +'>' + '<label class="form-check-label" for=' + root.tag + str(level) + '>  ' + root.tag + ' </label><ul class="nested">'
     for i in list(root):
         if list(i) != []:
             res += walk(i, level + 1)
