@@ -5,6 +5,36 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script>
+  var checked = [];
+  function getCheckedBoxes() {
+    var treeview = document.getElementById("treeview");
+    var ul = treeview.getElementsByTagName("ul");
+    for (var i = 0; i < ul.length; ++i) {
+      var list = ul[i].getElementsByTagName("li");
+      for (var j = 0; j < list.length; ++j) {
+        var temp = [];
+        temp.push(list[j].childNodes[0].checked);
+        temp.push(list[j].innerText);
+        checked.push(temp);
+      }
+    }
+    return checked;
+  }
+  function term() {
+    var input = document.getElementById("input-script");
+    var output = eval(input.value)
+    document.getElementById('output-script').innerHTML = output;
+  }
+  $(function () {
+  $("#jstree_demo_div").jstree({
+    "checkbox" : {
+      "keep_selected_style" : false
+    },
+    "plugins" : [ "checkbox" ]
+  });
+});
+</script>
 <style>
 html {
   font-size: 100%;
@@ -23,23 +53,7 @@ body {background-image: none}
   <br>
   <button type="button" class="btn btn-primary" onclick=getCheckedBoxes();>Create columns</button>
 </div>
-<script>
-function getCheckedBoxes() {
-    var checked = [];
-    var treeview = document.getElementById("treeview");
-    var ul = treeview.getElementsByTagName("ul");
-    for (var i = 0; i < ul.length; ++i) {
-      var list = ul[i].getElementsByTagName("li");
-      for (var j = 0; j < list.length; ++j) {
-        var temp = [];
-        temp.push(list[j].childNodes[0].checked);
-        temp.push(list[j].innerText);
-        checked.push(temp);
-      }
-    }
-    console.log(checked);
-}
-</script>
+
 
 <br>
 
@@ -102,33 +116,4 @@ function getCheckedBoxes() {
 <button type="button" class="btn btn-primary">Create columns</button>
 {% endblock %}
 
-<script>
-  var checked = [];
-  function getCheckedBoxes() {
-    var treeview = document.getElementById("treeview");
-    var ul = treeview.getElementsByTagName("ul");
-    for (var i = 0; i < ul.length; ++i) {
-      var list = ul[i].getElementsByTagName("li");
-      for (var j = 0; j < list.length; ++j) {
-        var temp = [];
-        temp.push(list[j].childNodes[0].checked);
-        temp.push(list[j].innerText);
-        checked.push(temp);
-      }
-    }
-    return checked;
-  }
-  function term() {
-    var input = document.getElementById("input-script");
-    var output = eval(input.value)
-    document.getElementById('output-script').innerHTML = output;
-  }
-  $(function () {
-  $("#jstree_demo_div").jstree({
-    "checkbox" : {
-      "keep_selected_style" : false
-    },
-    "plugins" : [ "checkbox" ]
-  });
-});
-</script>
+
