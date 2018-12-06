@@ -11,7 +11,7 @@
 		<p>Unique name of the slide, no spaces.</p><hr>
 		<h3>Slide style</h3>
 		<p>How to format slide</p>
-		<p>Style:<input type="radio" name="format" value="table">table <input type="radio" name="format" value="oneperpage">one per page 
+		<p>Style:  <input type="radio" name="format" value="table">table <input type="radio" name="format" value="oneperpage">one per page 
 		&nbsp &nbsp Justified: <input type="radio" name="jformat" value="left">left <input type="radio" name="jformat" value="center">center 
 		<span style="float:right;">Number of pages: <input type="text" name="pages"></span></p>
 		<hr>	
@@ -22,7 +22,7 @@
 		<h3>Name (German): <input type="text" name="Ger"></h3>
 		<p>Title of the slide appears on the screen. If not filled, that language is not used. <hr>
 		<h3>Query builder</h3>
-        <div class="col-xs-3">
+        <div class="col-xs-5">
           <label for="all_classes">Select dataset</label>
           <select class="form-control" id="all_classes">
 					<option disabled selected value> -- select a dataset -- </option>
@@ -34,10 +34,10 @@
 		<div><br><br><br>
 		<table border="0">
   			<tr>
-    			<div class="col-xs-3">
+    			<div class="col-xs-5">
 				<label for="all_entries">Select resource</label>
-				<select class="form-control" id="all_entries">
-					<option disabled selected value> -- select a resource -- </option>
+				<select class="form-control" id="all_entries" disabled>
+					<option value="selectRecource" disabled selected value> -- select a resource -- </option>
 				{% for o in all_entries %}
                     <option id="resource_id" value="{{ o }}">{{ o }}</option>
 				{% endfor %}
@@ -48,7 +48,7 @@
 			{% for fieldValue in fieldValues %}
 			<tr>
     				<td><input type="checkbox" name="checkbox" id="checkbox_id{{ loop.index0 }}" value="{{fieldValue}}"><input type="text" name="field{{ loop.index0 }}" value="{{fieldValue}}" id="field_id{{ loop.index0 }}" readonly></td>
-    				<td><form action=""><input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="desc">desc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="asc"> asc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="none">none</form></td>
+    				<td><form action=""><input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="DESC">desc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="ASC"> asc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="NONE">none</form></td>
 
 				<td>
 					<select name="modifier{{ loop.index0 }}">
@@ -105,9 +105,9 @@ SELECT name, date, lat, lon from resource_name WHERE xxxx
 				<td></td>
 			</tr>
 		</table>
-		<h3>Custom template (hide)</h3>
-		<p>Formats text in specific way in python sandbox.</p>
-		<textarea rows="6" cols="100%">
+		<h3>Custom template <span id="hideTemp">(hide)</span><span id="showTemp" hidden>(show)</span></h3>
+		<p id="templateinfo">Formats text in specific way in python sandbox.</p>
+		<textarea rows="6" cols="100%" name="templateSQL" id="templateSQL">
 import time
 for d_in... etc
 		</textarea><br>
@@ -153,25 +153,95 @@ for d_in... etc
 				$('#hideCSQL').show();
 			});
 		});
+		
+		$(document).ready(function(){
+			$("#hideTemp").click(function(){
+				$(this).hide();
+				$('#templateSQL').hide();
+				$('#templateinfo').hide();
+				$('#showTemp').show();
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#showTemp").click(function(){
+				$(this).hide();
+				$('#templateSQL').show();
+				$('#templateinfo').show();
+				$('#hideTemp').show();
+			});
+		});
 	</script>
 	
 	<script type="text/javascript">	
 		var myId = "";
+		var rList = "";
+		var sList = "";
+		var readSQLplaceholder = $('#readSQL').val();
+		
+		$("#all_classes").change(function() {
+			rList = "";
+			sList = "";
+			$('input[name="radio"]').removeAttr("checked");
+			$('input[name="checkbox"]').removeAttr("checked");			
+			$('#readSQL').val(readSQLplaceholder);
+			$("select[id='all_entries']").removeAttr("disabled");
+			$('#all_entries option:selected').hide();
+
+		});
+	
 		$("#all_entries").change(function() {
-		myId = $("#all_entries option:selected").text();
+			rList = "";
+			sList = "";
+			$('input[name="radio"]').removeAttr("checked");
+			$('input[name="checkbox"]').removeAttr("checked");	
+			myId = $("#all_entries option:selected").text();
+			updateReadSQL();		
 		});
 		
+		$('input[name="radio"]').click(function () {	
+			rList = "";
+			$('input[name="radio"]').each(function () {
+				var rThisVal = this.value;
+				if (this.checked && (rThisVal == "ASC" || rThisVal == "DESC")){
+					var rThisId = this.id;
+					var rSplitId = rThisId.split("_");
+					var textId = 'checkbox_'+rSplitId[1];
+					var rValue = $("#"+textId).val();
+					var rListAdd = rValue + " " + rThisVal;
+					rList += (rList=="" ? rListAdd : ", " + rListAdd);					
+				}				
+			});
+			updateReadSQL();
+
+		});
 		
 		$('input[name="checkbox"]').click(function () {
-			var sList="";
+			sList="";
 			$('input[type=checkbox]').each(function () {
 				if (this.checked) {				
 					var sThisVal = this.value;
-				sList += (sList=="" ? sThisVal : ", " + sThisVal);
+					sList += (sList=="" ? sThisVal : ", " + sThisVal);
 				}
 			});
-			$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId);		
-		});		
+			updateReadSQL();
+		});	
+		
+		function updateReadSQL(){
+			if (myId != ""){
+				if (sList != ""){
+					if (rList != ""){
+						$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId + ' ORDER BY ' + rList);		
+						return;
+					}
+					$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId);		
+					return;
+				}
+				$('#readSQL').val('SELECT * FROM ' + myId);	
+			}
+			
+		}
+			
 	</script>
 	
 	
@@ -179,24 +249,25 @@ for d_in... etc
       $(document).ready(function() {
 
         $('#all_classes').change(function(){
-
+	
           $.getJSON('/_update_dropdown', {
             selected_class: $('#all_classes').val()
 
           }).success(function(data) {
                 $('#all_entries').html(data.html_string_selected);
+				$('#all_entries').val("");
            })
         });
         $('#process_input').bind('click', function() {
 
-            $.getJSON('/_process_data', {
+            /*$.getJSON('/_process_data', {
                 selected_class: $('#all_classes').val(),
                 selected_entry: $('#all_entries').val(),
 
 
             }).success(function(data) {
                 $('#processed_results').text(data.random_text);
-            })
+            })*/
           return false;
 
         });
