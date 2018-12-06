@@ -229,14 +229,19 @@ for d_in... etc
 		
 		function updateReadSQL(){
 			if (myId != ""){
-				if (sList != ""){
-					if (rList != ""){
-						$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId + ' ORDER BY ' + rList);		
-						return;
-					}
+				if (sList != "" && rList == ""){					
 					$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId);		
 					return;
 				}
+				if (sList != "" && rList != ""){
+						$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId + ' ORDER BY ' + rList);		
+						return;
+					}
+				if (sList == "" && rList != ""){
+						$('#readSQL').val('SELECT * FROM ' + myId + ' ORDER BY ' + rList);		
+						return;
+					}
+				
 				$('#readSQL').val('SELECT * FROM ' + myId);	
 			}
 			
