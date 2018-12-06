@@ -5,7 +5,7 @@ from flask import Markup
 from ckan.common import json, config
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
-
+import xmltodict, json
 from lxml import etree
 from collections import Counter
 from ckan.common import config
@@ -83,6 +83,8 @@ class EditorPlugin(p.SingletonPlugin):
         treeview = walk(tree.getroot())
         for tag in root.iter():
           tag_list.append(tag.tag)
+        
+        data = json.dumps(xmltodict.parse(open(file_path, 'r').read())     
           
-        return {'root': root, 'tree': tree, 'treeview': Markup(treeview), 'tag_list': tag_list}
+        return {'root': root, 'tree': tree, 'treeview': Markup(treeview), 'tag_list': tag_list, 'data': data}
 
