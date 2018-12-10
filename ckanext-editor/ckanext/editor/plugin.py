@@ -84,7 +84,7 @@ class EditorPlugin(p.SingletonPlugin):
         for tag in root.iter():
           tag_list.append(tag.tag)
         
-        data = json.dumps(xmltodict.parse(open(file_path, 'r').read())     
+        data = json.dumps(xmltodict.parse(open(file_path, 'r').read()))     
           
         return {'root': root, 'tree': tree, 'treeview': Markup(treeview), 'tag_list': tag_list, 'data': data}
 
