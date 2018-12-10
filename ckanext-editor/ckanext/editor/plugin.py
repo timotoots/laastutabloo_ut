@@ -84,7 +84,16 @@ class EditorPlugin(p.SingletonPlugin):
         for tag in root.iter():
           tag_list.append(tag.tag)
         
-        data = json.dumps(xmltodict.parse(open(file_path, 'r').read())     
+        a=xmltodict.parse(open(file_path, 'r').read())
+        b = {}
+        for i in a: 
+          b[i] = {
+				'id' : 'node_2',
+				'text' : 'Root node with options',
+				'state' : { 'opened' : true, 'selected' : true },
+				'children' : [ { 'text' : 'Child 1' }, 'Child 2']
+			} 
+        data = json.dumps()  
           
         return {'root': root, 'tree': tree, 'treeview': Markup(treeview), 'tag_list': tag_list, 'data': data}
 
