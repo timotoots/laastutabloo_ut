@@ -5,9 +5,10 @@ from ckan.common import config
 
 FILESTORAGE_PATH = config.get('ckan.storage_path') 
 
+
+# Filter Dataset
 def filter(context, resource):
     # Get useful metadata for the resource
-    print resource
     file_type = resource['format']
     file_id = resource['id']
     
@@ -15,10 +16,6 @@ def filter(context, resource):
     file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" +\
                 file_id[3:6] + "/" + file_id[6:] 
     
-    # ----------------------------------------
-    # Convert()
-    # ----------------------------------------
-
     # Switch-Case for filetype differenciation
     if file_type=='XML':
         data = xml(file_path)
@@ -29,16 +26,12 @@ def filter(context, resource):
     else:
 	      print "Not a valid file type"
 	  
-    # ----------------------------------------
-    # Run script
-    # ----------------------------------------  
+    # Run script 
     if os.path.isfile(file_path + ".schema"):
       script = open(file_path + ".schema").read()
       data = eval(script)    
 
-    # ----------------------------------------
-    # Complete
-    # ----------------------------------------
+    # Complete data according to schema
     if os.path.isfile(file_path + ".script"):
       schema = open(file_path + ".script").read()
       data = complete(data, schema)
@@ -49,7 +42,7 @@ def filter(context, resource):
     f.write(data.to_csv())
     action.update.resource_update(context, {'type': 'CSV', 'format': 'CSV', 'id' : file_id})
 
-
+# Change columns according to schema
 def complete(data, schema):
     # Read schema
     schema = pandas.read_json(schema)
@@ -64,7 +57,7 @@ def complete(data, schema):
 
     return data
 
-
+# Convert XML to pandas
 def xml(file_path):
     tree = ET.parse(file_path)
 
@@ -78,9 +71,11 @@ def xml(file_path):
 
     return pandas.DataFrame(data)
 
+# Convert JSON to pandas
 def json(file_path):
     return pandas.read_json(file_path)
 
+# Convert CSV to pandas
 def csv(file_path):
     return pandas.read_csv(file_path)
   
