@@ -1,20 +1,19 @@
-import ujson, csv
 import xml.etree.ElementTree as ET
-import pandas
+import pandas, os
+import ckan.logic.action as act
 
 from ckan.common import config
 FILESTORAGE_PATH = config.get('ckan.storage_path') 
 
-def filter(resource, schema, script):
+def filter(context, resource):
     # Get useful metadata for the resource
     file_type = resource['type']
     file_id = resource['id']
     
     #Construct path for filestorer
     file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" +\
-                file_id[3:6] + "/" + file_id[6:]
-        
-
+                file_id[3:6] + "/" + file_id[6:] 
+    
     # ----------------------------------------
     # Convert()
     # ----------------------------------------
@@ -32,29 +31,32 @@ def filter(resource, schema, script):
     # ----------------------------------------
     # Run script
     # ----------------------------------------  
-        
-    # data = script(data, schema, script)    
+    if os.path.isfile(file_path + ".schema"):
+      script = open(file_path + ".schema").read()
+      data = eval(script)    
 
     # ----------------------------------------
     # Complete
     # ----------------------------------------
+    if os.path.isfile(file_path + ".script"):
+      schema = open(file_path + ".script").read()
+      data = complete(data, schema)
     
-    #data = complete(data, schema, script)
-    
-    # Upload resource
-    print data.to_csv()
-    
-       
+    # change resource
+    os.remove(file_path)
+    f = open(file_path, "w")
+    f.write(data.to_csv())
+    act.update.resource_update(context, {'format': 'CSV', 'id' : file_id})
 
 
 def complete(data, schema):
     # Read schema
-    # Convert CSV to pandas
+    schema = json(schema)
+    
     # Remove columns
     # Add columns
     # Change column names
     # Change column type 
-    # Export Pandas to CSV
 
     return data
 

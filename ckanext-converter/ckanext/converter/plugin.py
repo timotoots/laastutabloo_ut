@@ -8,7 +8,7 @@ class ConverterPlugin(plugins.SingletonPlugin):
     
     # Filter received resource after upload
     def after_create(self, context, resource):
-        filter.filter(resource)
+        filter.filter(context, resource)
     
     # Not needed, so not changed
     def before_create(self, context, resource):
@@ -20,7 +20,7 @@ class ConverterPlugin(plugins.SingletonPlugin):
     
     # Not needed, so not changed
     def after_update(self, context, resource):
-        pass
+        filter.filter(context, resource)
     
     # Not needed, so not changed
     def before_delete(self, context, resource, resources):
