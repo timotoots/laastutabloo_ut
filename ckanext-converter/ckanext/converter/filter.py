@@ -1,10 +1,11 @@
 import ujson, csv
 import xml.etree.ElementTree as ET
+import pandas
 
 from ckan.common import config
 FILESTORAGE_PATH = config.get('ckan.storage_path') 
 
-def filter(resource):
+def filter(resource, schema, script):
     # Get useful metadata for the resource
     file_type = resource['type']
     file_id = resource['id']
@@ -12,45 +13,68 @@ def filter(resource):
     #Construct path for filestorer
     file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" +\
                 file_id[3:6] + "/" + file_id[6:]
-    
-    # Validate()
-    # ----------------------------------------
-    
-    # Switch-Case for filetype differenciation
-    if file_type=='XML':
-        return xml_to_csv(file_id, file_path)
-    elif file_type=='JSON':
-        return json_to_csv(file_id, file_path)
-    elif file_type=='CSV':
-        return file_path
-    else:
-	print "error"
-	        
+        
+
     # ----------------------------------------
     # Convert()
     # ----------------------------------------
-    # Complete()
+
+    # Switch-Case for filetype differenciation
+    if file_type=='XML':
+        data = xml(file_path)
+    elif file_type=='JSON':
+        data = json(file_path)
+    elif file_type=='CSV':
+        data = csv(file_path)
+    else:
+	      print "Not a valid file type"
+	  
     # ----------------------------------------
-    # Validate()
+    # Run script
+    # ----------------------------------------  
+        
+    # data = script(data, schema, script)    
+
+    # ----------------------------------------
+    # Complete
     # ----------------------------------------
     
+    #data = complete(data, schema, script)
+    
+    # Upload resource
+    print data.to_csv()
+    
+       
 
 
-# Convert JSON to CSV
-def json_to_csv(file_id, file_path):
-    return file_path
+def complete(data, schema):
+    # Read schema
+    # Convert CSV to pandas
+    # Remove columns
+    # Add columns
+    # Change column names
+    # Change column type 
+    # Export Pandas to CSV
 
-# Convert XML to CSV
-def xml_to_csv(file_id, file_path):
+    return data
+
+
+def xml(file_path):
     tree = ET.parse(file_path)
-    root = tree.getroot()
-    Resident_data = open(FILESTORAGE_PATH + "/converted/" + file_id, 'w')
-    csvwriter = csv.writer(Resident_data)
-    for i in root:
-        row = []
-        for j in i:
-            if j.text: 
-                row.append(j.text.encode('utf-8'))
-        csvwriter.writerow(row)
-    return FILESTORAGE_PATH + "/converted/" + file_id
 
+    data = []
+    tmp = {}
+    for i in tree.iterfind('./*'):
+        for j in i.iterfind('*'):
+            tmp[j.tag] = j.text
+        data.append(tmp)
+        tmp = {}
+
+    return pandas.DataFrame(data)
+
+def json(file_path):
+    return pandas.read_json(file_path)
+
+def csv(file_path):
+    return pandas.read_csv(file_path)
+  
