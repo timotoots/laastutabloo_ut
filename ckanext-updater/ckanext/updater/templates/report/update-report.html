@@ -1,0 +1,92 @@
+{#
+Report (snippet)
+
+table - main data, as a list of rows, each row is a dict
+data - other data values, as a dict
+#}
+<ul>
+    <li>{% trans %}Total number of updates{% endtrans %}: {{ table|length }}</li>
+</ul>
+
+<h2>Full history for failed updates</h2>
+
+<table class="table table-bordered table-condensed tablesorter" id="report-table-failed" style="width: 100%; table-layout:fixed; margin-top: 8px;">
+    <thead>
+      <tr>
+        <th>{% trans %}Name{% endtrans %}</th>
+        <th>{% trans %}Time{% endtrans %}</th>
+        <th>{% trans %}Success{% endtrans %}</th>
+        <th>{% trans %}Details{% endtrans %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data['fail_table'] %}
+        <tr>
+          <td>
+            <a href="{{ h.url_for(controller='package', action='view', id=row.id) }}">
+              {{ row.name }}
+            </a>
+          </td>
+          <td>{{ row.time }}</td>
+          <td>{{ row.success }}</td>
+          <td>{{ row.details }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+<h2>History of 10 last updates for each resource</h2>
+
+<table class="table table-bordered table-condensed tablesorter" id="report-table-failed" style="width: 100%; table-layout:fixed; margin-top: 8px;">
+    <thead>
+      <tr>
+        <th>{% trans %}Name{% endtrans %}</th>
+        <th>{% trans %}Updates{% endtrans %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data['grouped_table'] %}
+        <tr>
+          <td>
+            <a href="{{ h.url_for(controller='package', action='view', id=row.id) }}">
+              {{ row.name }}
+            </a>
+          </td>
+          <td>
+            <ul>
+              {% for inner_row in row['history'] %}
+                <li>{{ inner_row.time }}, {{ inner_row.success }}, {{ inner_row.details }}</li>
+              {% endfor %}
+            <ul>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+<h2>Full History</h2>
+
+<table class="table table-bordered table-condensed tablesorter" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
+    <thead>
+      <tr>
+        <th>{% trans %}Name{% endtrans %}</th>
+        <th>{% trans %}Time{% endtrans %}</th>
+        <th>{% trans %}Success{% endtrans %}</th>
+        <th>{% trans %}Details{% endtrans %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in table %}
+        <tr>
+          <td>
+            <a href="{{ h.url_for(controller='package', action='view', id=row.id) }}">
+              {{ row.name }}
+            </a>
+          </td>
+          <td>{{ row.time }}</td>
+          <td>{{ row.success }}</td>
+          <td>{{ row.details }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
