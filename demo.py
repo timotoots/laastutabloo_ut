@@ -12,7 +12,7 @@ api_key = "3a3e6c64-9d9a-4ee7-99b0-fd2d26e399da"
 host = "http://127.0.0.1:5000"
 org_id = "testorg"
 
-#test_file = "/home/user/Downloads/liiklusjarelevalve2.csv"
+test_file = "/home/user/a.xml"
 test_link = "https://www.spordiregister.ee/opendata/files/spordikoolid.xml"
 
 def get_hash(file):
@@ -127,13 +127,13 @@ raw_input()
 
 # Upload resources
 print("\nUploading new resources")
-#print("From file")
-#resp = upload_file(host, api_key, "uploadtest", "CSV", dataset_id, "testorg", test_file)
-#print("success: " + str(json.loads(resp.content)["success"]))
-#raw_input()
-print("From link")
-resp = upload_file_from_link(host, api_key, "linktest.xml", "XML", dataset_id, "testorg", test_link)
+print("From file")
+resp = upload_file(host, api_key, "uploadtest", "XML", dataset_id, "testorg", test_file)
 print("success: " + str(json.loads(resp.content)["success"]))
+raw_input()
+#print("From link")
+#resp = upload_file_from_link(host, api_key, "linktest.xml", "XML", dataset_id, "testorg", test_link)
+#print("success: " + str(json.loads(resp.content)["success"]))
 raw_input()
 
 # Delete resources
