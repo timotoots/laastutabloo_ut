@@ -1,13 +1,14 @@
 import xml.etree.ElementTree as ET
 import pandas, os
-import ckan.logic.action as act
-
+from ckan.logic import action
 from ckan.common import config
+
 FILESTORAGE_PATH = config.get('ckan.storage_path') 
 
 def filter(context, resource):
     # Get useful metadata for the resource
-    file_type = resource['type']
+    print resource
+    file_type = resource['format']
     file_id = resource['id']
     
     #Construct path for filestorer
@@ -46,17 +47,20 @@ def filter(context, resource):
     os.remove(file_path)
     f = open(file_path, "w")
     f.write(data.to_csv())
-    act.update.resource_update(context, {'format': 'CSV', 'id' : file_id})
+    action.update.resource_update(context, {'type': 'CSV', 'format': 'CSV', 'id' : file_id})
 
 
 def complete(data, schema):
     # Read schema
-    schema = json(schema)
+    schema = pandas.read_json(schema)
     
-    # Remove columns
-    # Add columns
-    # Change column names
-    # Change column type 
+    for i in schema:
+      if schema[i][0]=='':
+        del data[i]
+      elif i != schema[i][0]:
+        data.rename(index=str, columns={i: schema[i][0]})
+      elif i not in data:
+        data[i] = schema[i][0]
 
     return data
 

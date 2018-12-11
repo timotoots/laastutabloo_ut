@@ -20,7 +20,8 @@ class ConverterPlugin(plugins.SingletonPlugin):
     
     # Not needed, so not changed
     def after_update(self, context, resource):
-        filter.filter(context, resource)
+        pass
+        #filter.filter(context, resource)
     
     # Not needed, so not changed
     def before_delete(self, context, resource, resources):
