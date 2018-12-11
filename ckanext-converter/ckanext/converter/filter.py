@@ -7,7 +7,6 @@ FILESTORAGE_PATH = config.get('ckan.storage_path')
 
 def filter(context, resource):
     # Get useful metadata for the resource
-    print resource
     file_type = resource['format']
     file_id = resource['id']
     
@@ -46,7 +45,7 @@ def filter(context, resource):
     # change resource
     os.remove(file_path)
     f = open(file_path, "w")
-    f.write(data.to_csv())
+    f.write(data.to_csv(encoding='utf-8'))
     action.update.resource_update(context, {'type': 'CSV', 'format': 'CSV', 'id' : file_id})
 
 
