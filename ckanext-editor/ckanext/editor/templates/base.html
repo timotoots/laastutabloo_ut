@@ -92,10 +92,30 @@ body {background-image: none}
 </div>
 
 <script>
-// Get given script
+// Send schema and script
 function save() {
-  parent.window.script = $("#inputscript").val();
-  parent.window.schema = $("#jstree").jstree(true).get_checked();
+
+  // Upload schema
+  $.ajax({ type: "POST",
+          url: "127.0.0.1:5000/api/action/resource_create",
+          headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+          data: {"name": "schema",
+           "package_id": '{{ dataset_id }}' ,
+           "type": "JSON",
+           "owner_org": "testorg"},
+          files: [$("#jstree").jstree(true).get_checked().toString()]
+  });
+  
+  // Upload script
+  $.ajax({ type: "POST",
+          url: "127.0.0.1:5000/api/action/resource_create",
+          headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+          data: {"name": "script",
+           "package_id": '{{ dataset_id }}' ,
+           "type": "JSON",
+           "owner_org": "testorg"},
+          files: [$("#inputscript").val()]
+  });
 };
 
 // JSTree

@@ -66,14 +66,17 @@ class EditorPlugin(p.SingletonPlugin):
    
     def view_template(self, context, data_dict):
         return 'base.html'
-    
-                     
+                       
     def setup_template_variables(self, context, data_dict):
         resource = data_dict['resource']
         filetype = resource["format"]
         file_id = resource['id']
         file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" + file_id[3:6] + "/" + file_id[6:]
+        # Pass dataset to js
         data = open(file_path, 'r').read()       
-          
-        return {'data': data}
+        
+        # Fetch current user's api_key and pass it to js
+        api_key = toolkit.get_action('user_show')(context, {'id': toolkit.c.userobj.id})['apikey']
+        dataset_id = toolkit.c.id
+        return {'data': data, 'api_key': api_key, 'dataset_id': dataset_id}
 
