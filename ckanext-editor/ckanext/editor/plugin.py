@@ -67,24 +67,13 @@ class EditorPlugin(p.SingletonPlugin):
     def view_template(self, context, data_dict):
         return 'base.html'
     
-    def form_template(self, context, data_dict):
-        return 'base_form.html'
                      
     def setup_template_variables(self, context, data_dict):
         resource = data_dict['resource']
-        filetype = resource["type"]
+        filetype = resource["format"]
         file_id = resource['id']
         file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" + file_id[3:6] + "/" + file_id[6:]
-        root = etree.fromstring(open(file_path, 'r').read())        
-        tree = etree.ElementTree(root)
-        treeview = ""
-        tag_list = []
-                
-        treeview = walk(tree.getroot())
-        for tag in root.iter():
-          tag_list.append(tag.tag)
-        
-        data = json.dumps(xmltodict.parse(open(file_path, 'r').read()))     
+        data = open(file_path, 'r').read()       
           
-        return {'root': root, 'tree': tree, 'treeview': Markup(treeview), 'tag_list': tag_list, 'data': data}
+        return {'data': data}
 

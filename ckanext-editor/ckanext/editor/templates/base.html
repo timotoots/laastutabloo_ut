@@ -19,51 +19,14 @@ body {background-image: none}
 <!-- JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-<script>
-  var schema = [];
-  console.log({{ data |safe }})
-  
-  function getCheckedBoxes() {
-    var treeview = document.getElementById("treeview");
-    var ul = treeview.getElementsByTagName("ul");
-    for (var i = 0; i < ul.length; ++i) {
-      var list = ul[i].getElementsByTagName("li");
-      for (var j = 0; j < list.length; ++j) {
-        var temp = [];
-        temp.push(list[j].childNodes[0].checked);
-        temp.push(list[j].innerText);
-        schema.push(temp);
-      }
-    }
-    return schema;
-  }
-  function term() {
-    var input = document.getElementById("input-script");
-    var output = input.value
-    document.getElementById('output-script').innerHTML = output;
-  }
-  $(function () {
-  $("#jstree").jstree({
-    "checkbox" : {
-      "keep_selected_style" : false
-    },
-    "plugins" : [ "checkbox" ]
-  });
-});
-</script>
-
-
 <!------------------------ Main ----------------------->
-
 
 <div class="container-fluid bg-white border rounded p-3">
   <h2> Column selection </h2>
   Select columns from the original:
-  <div class="container-fluid border border-primary rounded" id="treeview">
-    {% print treeview %}
+  <div class="container-fluid border border-primary rounded" id="jstree">
   </div>
   <br>
-  <button type="button" class="btn btn-primary" onclick=getCheckedBoxes();>Create columns</button>
 </div>
 
 
@@ -73,13 +36,10 @@ body {background-image: none}
   <h2> Custom script </h2>
   <div class="container-fluid border rounded p-3">
     <div class="form-group">
-      <input type="text" class="form-control bg-white border border-primary rounded" id="input-script">
-      <p id="output-script"></p>
+      <textarea rows="10" class="form-control bg-white border border-primary rounded" id="inputscript"></textarea>
     </div>
-    <button type="button" class="btn btn-secondary" onclick=term();>Run</button>
   </div>
   <br>
-  <button type="button" class="btn btn-primary">Create columns</button>
 </div>
 
 <br>
@@ -125,7 +85,32 @@ body {background-image: none}
   </table>
 </div>
 
-<button type="button" class="btn btn-primary">Create columns</button>
+<br>
+
+<div>
+  <button type="button" class="btn btn-secondary" onclick=save();>Save</button>
+</div>
+
+<script>
+// Get given script
+function save() {
+  parent.window.script = $("#inputscript").val();
+  parent.window.schema = $("#jstree").jstree(true).get_checked();
+};
+
+// JSTree
+$('#jstree').jstree({
+		'core' : {
+			'data' : [
+				{ "text" : "Root node", "children" : [
+						{ "text" : "Child node 1" },
+						{ "text" : "Child node 2" }
+				]}
+			]
+		}, "plugins" : ["checkbox"]
+});
+</script>
+
 
 {######################### CKAN #########################}
 {% endblock %}
