@@ -97,7 +97,7 @@ function save() {
 
   // Upload schema
   $.ajax({ type: "POST",
-          url: "127.0.0.1:5000/api/action/resource_create",
+          url: window.location.origin + "/api/action/resource_create",
           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
           data: {"name": "schema",
            "package_id": '{{ dataset_id }}' ,
@@ -108,7 +108,7 @@ function save() {
   
   // Upload script
   $.ajax({ type: "POST",
-          url: "127.0.0.1:5000/api/action/resource_create",
+          url: window.location.origin + "/api/action/resource_create",
           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
           data: {"name": "script",
            "package_id": '{{ dataset_id }}' ,
@@ -116,6 +116,8 @@ function save() {
            "owner_org": "testorg"},
           files: [$("#inputscript").val()]
   });
+
+  
 };
 
 // JSTree
