@@ -72,7 +72,7 @@ class EditorPlugin(p.SingletonPlugin):
 
     def setup_template_variables(self, context, data_dict):
         resource = data_dict['resource']
-        filetype = resource["format"]
+        file_type = resource["format"]
         file_id = resource['id']
         file_path = FILESTORAGE_PATH + "/resources/" + file_id[:3] + "/" + file_id[3:6] + "/" + file_id[6:]
         # Pass dataset to js
@@ -83,12 +83,16 @@ class EditorPlugin(p.SingletonPlugin):
         elif file_type=='JSON':
             data = json(file_path)
         elif file_type=='CSV':
-            data = csv(file_path)
+            res = data.split(",")
+            data = []
+            for i in res:
+                data.append({"text": i, "state" : {
+                             "opened": "false",   
+                             "selected": "false"  
+                            }
+                })             
         else:
     	      print "Not a valid file type"
-
-        data = data.to_json(encoding='utf-8')
-        print data
 
         # Fetch current user's api_key and pass it to js
         api_key = toolkit.get_action('user_show')(context, {'id': toolkit.c.userobj.id})['apikey']

@@ -27,6 +27,7 @@ body {background-image: none}
   <div class="container-fluid border border-primary rounded" id="jstree">
   </div>
   <br>
+  <button type="button" class="btn btn-secondary" onclick=create_table();>Update columns</button>
 </div>
 
 
@@ -47,42 +48,7 @@ body {background-image: none}
 <div class="container-fluid border rounded p-3">
   <h2> Column types </h2>
   Map columns to types
-  <table id="tab" class="table">
-    <thead>
-      <tr>
-        <th scope="col">Original column name</th>
-        <th scope="col">Standard column name</th>
-        <th scope="col">Column type</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for i in tag_list %}
-      <tr>
-        <td scope="row"> {{ i }} </td>
-        <td>
-          <div class="form-group">
-            <select class="form-control" id="sel1">
-              <option>lat</option>
-              <option>lon</option>
-              <option>name</option>
-              <option>url</option>
-            </select>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <select class="form-control" id="sel1">
-              <option>int</option>
-              <option>string</option>
-              <option>bool</option>
-              <option>float</option>
-            </select>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <table id="tab" class="table"></table>
 </div>
 
 <br>
@@ -92,45 +58,105 @@ body {background-image: none}
 </div>
 
 <script>
+// JSTree
+$('#jstree').jstree({
+	  'core' : {
+		  'data' : {{ data | safe }}
+	  }, "plugins" : ["checkbox"]
+});
+
+// Table
+function create_table(){
+  
+  // Get checked elements
+  var list = $("#jstree").jstree(true).get_checked(true)
+  console.log(list)
+  // Get table
+  var table = document.getElementById("tab");
+  table.innerHTML = "";
+  // Create header for the table
+  var header = table.createTHead();
+  var hrow = header.insertRow(0);
+  var headercell0 = hrow.insertCell(0);
+  var headercell1 = hrow.insertCell(1);
+  var headercell2 = hrow.insertCell(2);
+  headercell0.innerHTML = "<b>Original column name</b>";
+  headercell1.innerHTML = "<b>New column name</b>";
+  headercell2.innerHTML = "<b>Column type</b>";
+  
+  // Fill body with checked columns
+  var body = table.createTBody();
+  var i;
+  for (i = 0; i < list.length; i++) {
+    
+    // Column 0
+    var row = body.insertRow(0);
+    var cell0 = row.insertCell(0);
+    cell0.innerHTML = list[i].text.toString();
+
+    // Column 1
+    var cell1 = row.insertCell(1);
+    cell1.innerHTML = '<input type="text" class="form-control" id=' + list[i].text.toString() + ' placeholder="new column name"  value="">';
+    
+    // Column 2
+    var cell2 = row.insertCell(2);
+    var options = ["int", "lat", "long", "string"]; // Column type options
+   
+    tmp = '<select class="form-control">';
+    var j;
+    for (j = 0; j < options.length; j++) {
+      tmp += '<option>' + options[j] + '</option>';
+    }
+    tmp += '</select>';
+    cell2.innerHTML = tmp;
+  } 
+};
+
+
 // Send schema and script
 function save() {
 
+  var schema = {}
+  var rows = document.getElementById("tab").tBodies[0].rows
+  var i;
+  for (i = 0; i < rows.length; i++) {
+    schema[rows[i].cells[0].textContent.toString() ] = rows[i].cells[1].value.toString() ;
+    schema["type"] = rows[i].cells[2].value.toString() ;
+  }
+    
+  console.log(schema);
   // Upload schema
   $.ajax({ type: "POST",
           url: window.location.origin + "/api/action/resource_create",
           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
           data: {"name": "schema",
-           "package_id": '{{ dataset_id }}' ,
-           "type": "JSON",
-           "owner_org": "testorg"},
-          files: {[$("#jstree").jstree(true).get_checked().toString()]}
+                 "package_id": '{{ dataset_id }}' ,
+                 "type": "JSON",
+                 "owner_org": "testorg"},
+          files: [schema],
+          async: false,
+          cache: false,
+          timeout: 30000,
   });
-
+  
+  var script = $("#inputscript").val()
   // Upload script
   $.ajax({ type: "POST",
-          url: window.location.origin + "/api/action/resource_create",
-          headers: {"X-CKAN-API-Key": '{{ api_key }}' },
-          data: {"name": "script",
-           "package_id": '{{ dataset_id }}' ,
-           "type": "JSON",
-           "owner_org": "testorg"},
-          files: {[$("#inputscript").val()]}
+           url: window.location.origin + "/api/action/resource_create",
+           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+           data: {"name": "script",
+                  "package_id": '{{ dataset_id }}' ,
+                  "type": "JSON",
+                  "owner_org": "testorg"},
+           files: [script],
+           async: false,
+           cache: false,
+           timeout: 30000,
   });
 
 
 };
-
-// JSTree
-$('#jstree').jstree({
-		'core' : {
-			'data' : [
-				{ "text" : "Root node", "children" : [
-						{ "text" : "Child node 1" },
-						{ "text" : "Child node 2" }
-				]}
-			]
-		}, "plugins" : ["checkbox"]
-});
 </script>
+
 {######################### CKAN #########################}
 {% endblock %}
