@@ -47,7 +47,7 @@ body {background-image: none}
 <div class="container-fluid border rounded p-3">
   <h2> Column types </h2>
   Map columns to types
-  <table class="table">
+  <table id="tab" class="table">
     <thead>
       <tr>
         <th scope="col">Original column name</th>
@@ -103,9 +103,9 @@ function save() {
            "package_id": '{{ dataset_id }}' ,
            "type": "JSON",
            "owner_org": "testorg"},
-          files: [$("#jstree").jstree(true).get_checked().toString()]
+          files: {[$("#jstree").jstree(true).get_checked().toString()]}
   });
-  
+
   // Upload script
   $.ajax({ type: "POST",
           url: window.location.origin + "/api/action/resource_create",
@@ -114,10 +114,10 @@ function save() {
            "package_id": '{{ dataset_id }}' ,
            "type": "JSON",
            "owner_org": "testorg"},
-          files: [$("#inputscript").val()]
+          files: {[$("#inputscript").val()]}
   });
 
-  
+
 };
 
 // JSTree
@@ -132,7 +132,5 @@ $('#jstree').jstree({
 		}, "plugins" : ["checkbox"]
 });
 </script>
-
-
 {######################### CKAN #########################}
 {% endblock %}
