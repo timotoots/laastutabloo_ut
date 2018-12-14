@@ -70,7 +70,7 @@ function create_table(){
   
   // Get checked elements
   var list = $("#jstree").jstree(true).get_checked(true)
-  console.log(list)
+
   // Get table
   var table = document.getElementById("tab");
   table.innerHTML = "";
@@ -120,39 +120,41 @@ function save() {
   var rows = document.getElementById("tab").tBodies[0].rows
   var i;
   for (i = 0; i < rows.length; i++) {
-    schema[rows[i].cells[0].textContent.toString() ] = rows[i].cells[1].value.toString() ;
-    schema["type"] = rows[i].cells[2].value.toString() ;
+    schema[rows[i].cells[0].textContent.toString() ] = {
+      "newname": rows[i].cells[1].children[0].value.toString(), 
+      "newtype": rows[i].cells[2].children[0].value.toString()
+    };
   }
     
-  console.log(schema);
-  // Upload schema
-  $.ajax({ type: "POST",
-          url: window.location.origin + "/api/action/resource_create",
+  var script = $("#inputscript").val()
+    
+  // Get metadata
+  $.ajax({ type: "GET",
+          url: window.location.origin + "/api/action/resource_show",
           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
-          data: {"name": "schema",
-                 "package_id": '{{ dataset_id }}' ,
-                 "type": "JSON",
-                 "owner_org": "testorg"},
-          files: [schema],
+          data: {"id": '{{ resource_id }}'}        
+  }).then(function func(metadata) {
+        console.log(metadata)
+        window.data = metadata.result;
+        window.data["schema"] = schema;
+        window.data["script"] = script;
+        }
+  ).then($.ajax({ type: "POST",
+          url: window.location.origin + "/api/action/resource_update",
+          headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+          data: window.data,
           async: false,
           cache: false,
           timeout: 30000,
+  })).done(function(){
+    console.log("Uploaded!");
   });
   
-  var script = $("#inputscript").val()
-  // Upload script
-  $.ajax({ type: "POST",
-           url: window.location.origin + "/api/action/resource_create",
-           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
-           data: {"name": "script",
-                  "package_id": '{{ dataset_id }}' ,
-                  "type": "JSON",
-                  "owner_org": "testorg"},
-           files: [script],
-           async: false,
-           cache: false,
-           timeout: 30000,
-  });
+  // Upload schema
+  
+  
+  
+
 
 
 };

@@ -86,10 +86,7 @@ class EditorPlugin(p.SingletonPlugin):
             res = data.split(",")
             data = []
             for i in res:
-                data.append({"text": i, "state" : {
-                             "opened": "false",   
-                             "selected": "false"  
-                            }
+                data.append({"text": i
                 })             
         else:
     	      print "Not a valid file type"
@@ -97,4 +94,4 @@ class EditorPlugin(p.SingletonPlugin):
         # Fetch current user's api_key and pass it to js
         api_key = toolkit.get_action('user_show')(context, {'id': toolkit.c.userobj.id})['apikey']
         dataset_id = toolkit.c.id
-        return {'data': data, 'api_key': api_key, 'dataset_id': dataset_id}
+        return {'data': data, 'api_key': api_key, 'dataset_id': dataset_id, 'resource_id': file_id}
