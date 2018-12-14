@@ -19,51 +19,15 @@ body {background-image: none}
 <!-- JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-<script>
-  var schema = [];
-  console.log({{ data |safe }})
-  
-  function getCheckedBoxes() {
-    var treeview = document.getElementById("treeview");
-    var ul = treeview.getElementsByTagName("ul");
-    for (var i = 0; i < ul.length; ++i) {
-      var list = ul[i].getElementsByTagName("li");
-      for (var j = 0; j < list.length; ++j) {
-        var temp = [];
-        temp.push(list[j].childNodes[0].checked);
-        temp.push(list[j].innerText);
-        schema.push(temp);
-      }
-    }
-    return schema;
-  }
-  function term() {
-    var input = document.getElementById("input-script");
-    var output = input.value
-    document.getElementById('output-script').innerHTML = output;
-  }
-  $(function () {
-  $("#jstree").jstree({
-    "checkbox" : {
-      "keep_selected_style" : false
-    },
-    "plugins" : [ "checkbox" ]
-  });
-});
-</script>
-
-
 <!------------------------ Main ----------------------->
-
 
 <div class="container-fluid bg-white border rounded p-3">
   <h2> Column selection </h2>
   Select columns from the original:
-  <div class="container-fluid border border-primary rounded" id="treeview">
-    {% print treeview %}
+  <div class="container-fluid border border-primary rounded" id="jstree">
   </div>
   <br>
-  <button type="button" class="btn btn-primary" onclick=getCheckedBoxes();>Create columns</button>
+  <button type="button" class="btn btn-secondary" onclick=create_table();>Update columns</button>
 </div>
 
 
@@ -73,13 +37,10 @@ body {background-image: none}
   <h2> Custom script </h2>
   <div class="container-fluid border rounded p-3">
     <div class="form-group">
-      <input type="text" class="form-control bg-white border border-primary rounded" id="input-script">
-      <p id="output-script"></p>
+      <textarea rows="10" class="form-control bg-white border border-primary rounded" id="inputscript"></textarea>
     </div>
-    <button type="button" class="btn btn-secondary" onclick=term();>Run</button>
   </div>
   <br>
-  <button type="button" class="btn btn-primary">Create columns</button>
 </div>
 
 <br>
@@ -87,45 +48,108 @@ body {background-image: none}
 <div class="container-fluid border rounded p-3">
   <h2> Column types </h2>
   Map columns to types
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Original column name</th>
-        <th scope="col">Standard column name</th>
-        <th scope="col">Column type</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for i in tag_list %}
-      <tr>
-        <td scope="row"> {{ i }} </td>
-        <td>
-          <div class="form-group">
-            <select class="form-control" id="sel1">
-              <option>lat</option>
-              <option>lon</option>
-              <option>name</option>
-              <option>url</option>
-            </select>
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <select class="form-control" id="sel1">
-              <option>int</option>
-              <option>string</option>
-              <option>bool</option>
-              <option>float</option>
-            </select>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <table id="tab" class="table"></table>
 </div>
 
-<button type="button" class="btn btn-primary">Create columns</button>
+<br>
+
+<div>
+  <button type="button" class="btn btn-secondary" onclick=save();>Save</button>
+</div>
+
+<script>
+// JSTree
+$('#jstree').jstree({
+	  'core' : {
+		  'data' : {{ data | safe }}
+	  }, "plugins" : ["checkbox"]
+});
+
+// Table
+function create_table(){
+  
+  // Get checked elements
+  var list = $("#jstree").jstree(true).get_checked(true)
+
+  // Get table
+  var table = document.getElementById("tab");
+  table.innerHTML = "";
+  // Create header for the table
+  var header = table.createTHead();
+  var hrow = header.insertRow(0);
+  var headercell0 = hrow.insertCell(0);
+  var headercell1 = hrow.insertCell(1);
+  var headercell2 = hrow.insertCell(2);
+  headercell0.innerHTML = "<b>Original column name</b>";
+  headercell1.innerHTML = "<b>New column name</b>";
+  headercell2.innerHTML = "<b>Column type</b>";
+  
+  // Fill body with checked columns
+  var body = table.createTBody();
+  var i;
+  for (i = 0; i < list.length; i++) {
+    
+    // Column 0
+    var row = body.insertRow(0);
+    var cell0 = row.insertCell(0);
+    cell0.innerHTML = list[i].text.toString();
+
+    // Column 1
+    var cell1 = row.insertCell(1);
+    cell1.innerHTML = '<input type="text" class="form-control" id=' + list[i].text.toString() + ' placeholder="new column name"  value="">';
+    
+    // Column 2
+    var cell2 = row.insertCell(2);
+    var options = ["int", "lat", "long", "string"]; // Column type options
+   
+    tmp = '<select class="form-control">';
+    var j;
+    for (j = 0; j < options.length; j++) {
+      tmp += '<option>' + options[j] + '</option>';
+    }
+    tmp += '</select>';
+    cell2.innerHTML = tmp;
+  } 
+};
+
+
+// Send schema and script
+function save() {
+
+  var schema = {}
+  var rows = document.getElementById("tab").tBodies[0].rows
+  var i;
+  for (i = 0; i < rows.length; i++) {
+    schema[rows[i].cells[0].textContent.toString() ] = {
+      "newname": rows[i].cells[1].children[0].value.toString(), 
+      "newtype": rows[i].cells[2].children[0].value.toString()
+    };
+  }
+    
+  var script = $("#inputscript").val()
+    
+  // Get metadata then upload schema and script
+  $.ajax({ type: "GET",
+          url: window.location.origin + "/api/action/resource_show",
+          headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+          data: {"id": '{{ resource_id }}'}        
+  }).then(function func(metadata) {
+        window.data = metadata.result;
+        window.data["schema"] = schema;
+        window.data["script"] = script;
+        }
+  ).then($.ajax({ type: "POST",
+          url: window.location.origin + "/api/action/resource_update",
+          headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+          data: window.data,
+          async: false,
+          cache: false,
+          timeout: 30000,
+  })).done(function(){
+    console.log("Uploaded!");
+  });
+};
+</script>
 
 {######################### CKAN #########################}
 {% endblock %}
