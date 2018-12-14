@@ -4,7 +4,7 @@ from logging import getLogger
 from ckan.common import json, config
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
-from lxml import etree
+import xml.etree.ElementTree as ET
 from ckan.common import config
 import pandas
 
@@ -13,25 +13,6 @@ log = getLogger(__name__)
 ignore_empty = p.toolkit.get_validator('ignore_empty')
 natural_number_validator = p.toolkit.get_validator('natural_number_validator')
 Invalid = p.toolkit.Invalid
-
-def xml(file_path):
-    tree = ET.parse(file_path)
-
-    data = []
-    tmp = {}
-    for i in tree.iterfind('./*'):
-        for j in i.iterfind('*'):
-            tmp[j.tag] = j.text
-        data.append(tmp)
-        tmp = {}
-
-    return pandas.DataFrame(data)
-
-def json(file_path):
-    return pandas.read_json(file_path)
-
-def csv(file_path):
-    return pandas.read_csv(file_path)
 
 class EditorPlugin(p.SingletonPlugin):
     '''
@@ -79,17 +60,36 @@ class EditorPlugin(p.SingletonPlugin):
         data = open(file_path, 'r').read()
 
         if file_type=='XML':
-            data = xml(file_path)
+            tree = ET.parse(file_path)
+            data = []
+            tmp = {"text": tree.getroot().tag, "children":[]}
+            for i in tree.iterfind('./*'):
+                for j in i.iterfind('*'):
+                    tmp["children"].append({"text": j.tag, "state" : {
+                                                           "opened": "false",   
+                                                           "selected": "true"  
+                                                           }
+                                           })
+                data.append(tmp)
+                tmp = {"text": i.tag,"children":[]}      
+            s = set()
+            tmp = []
+            for i in data:
+                val = i['text']
+                if val not in s:
+                    tmp.append(i)
+                    s.add(val)
+            data = tmp
         elif file_type=='JSON':
-            data = json(file_path)
+            data = pandas.read_json(file_path)
         elif file_type=='CSV':
-            res = csv(file_path)
+            res = pandas.read_csv(file_path)
             res = list(res)
             data = []
             for i in res:
                 data.append({"text": i, "state" : {
                              "opened": "false",   
-                             "selected": "false"  
+                             "selected": "true"  
                             }
                 })             
         else:
