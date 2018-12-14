@@ -128,13 +128,12 @@ function save() {
     
   var script = $("#inputscript").val()
     
-  // Get metadata
+  // Get metadata then upload schema and script
   $.ajax({ type: "GET",
           url: window.location.origin + "/api/action/resource_show",
           headers: {"X-CKAN-API-Key": '{{ api_key }}' },
           data: {"id": '{{ resource_id }}'}        
   }).then(function func(metadata) {
-        console.log(metadata)
         window.data = metadata.result;
         window.data["schema"] = schema;
         window.data["script"] = script;
@@ -149,14 +148,6 @@ function save() {
   })).done(function(){
     console.log("Uploaded!");
   });
-  
-  // Upload schema
-  
-  
-  
-
-
-
 };
 </script>
 

@@ -83,10 +83,14 @@ class EditorPlugin(p.SingletonPlugin):
         elif file_type=='JSON':
             data = json(file_path)
         elif file_type=='CSV':
-            res = data.split(",")
+            res = csv(file_path)
+            res = list(res)
             data = []
             for i in res:
-                data.append({"text": i
+                data.append({"text": i, "state" : {
+                             "opened": "false",   
+                             "selected": "false"  
+                            }
                 })             
         else:
     	      print "Not a valid file type"
