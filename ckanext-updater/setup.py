@@ -52,4 +52,3 @@ setup(
     }
 )
 
-#update_report = ckanext.updater.plugin:UpdaterReportPlugin

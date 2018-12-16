@@ -1,0 +1,34 @@
+{% ckan_extends %}
+
+{% block content_action %}
+  {% link_for _('All resources'), controller='package', action='resources', id=pkg.name, class_='btn btn-default', icon='arrow-left' %}
+  {% if res %}
+    {% link_for _('View resource'), controller='package', action='resource_read', id=pkg.name, resource_id=res.id, class_='btn btn-default', icon='eye' %}
+  {% endif %}
+  {% if c.userobj.sysadmin %}
+    <div class="panel panel-info" style="width=700px">
+      <div class="panel-heading"><strong>{% trans %}Update resource{% endtrans %}</strong></div>
+      <div class="panel-body">
+        <p>{{ _('As a system administrator you are able to update this resource on demand by clicking the \'Update\' button. Doing this checks for possible updates just like automatic updating.') }}</p>
+        <button type="submit" id="update_button">Update resource</button>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript">
+      var update_button = document.getElementById("update_button");
+      var resource_id = document.getElementsByName("id")[0].value;
+      console.log(resource_id);
+      update_button.onclick = function(){
+        $.ajax({ type: "POST",
+          url: window.location.origin + "/update/" + resource_id,
+        }).done(function(){
+          location.reload();
+          console.log("Updated!");
+        });
+      };   
+    </script>
+{% endblock%}

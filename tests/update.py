@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import urllib
 import urllib2
 import json
 import requests
@@ -11,6 +12,15 @@ from dateutil import parser
 api_key = "9675909b-7627-484d-ae78-5b2932684a1b"
 host = "http://127.0.0.1:5000"
 hours_offset = -2
+update_log_location = "/home/user/update_log"
+
+# Writes update info to log
+def log_update(id, name, time, success, details):
+	f = open(update_log_location, "a")
+	log = '{"id": "' + str(id) + '", "name": "' + str(name) + '", "time": "' + str(time) + '", "success": "' + str(success) + '", "details": "' + str(details) + '"}'
+	f.write(log)
+	f.close()
+	print("Writing to log: " + str(update_log_location))
 
 # Computes the hash of a given file
 def get_hash(file_name):
@@ -99,7 +109,7 @@ def handle_missing_hash(host, api_key, resource_id, source_file):
 	if url[0:len(host)] == host:
 		print("Getting hash from filestore")
 		# Download file from filestore, calculate hash
-		res = download_file(resource_source_url, "server_file")
+		res = download_file(resource_source_url, "server_file", resource)
 		if res:
 			server_file = open("server_file")
 			res = compare_files(server_file, source_file)
@@ -133,6 +143,7 @@ def handle_url(host, api_key, resource_id):
 		# Check if source_url is ok
 		if source_url[0:len(host)] == host or not source_url:
 			print("Resource only in filestore, can't update")
+			log_update(resource["id"], resource["name"], datetime.now() + timedelta(hours=hours_offset), "Fail", "File only in filestore, no source url")
 			return False
 		else:
 			return source_url
@@ -160,7 +171,7 @@ def handle_update_resource(host, api_key, resource_id):
 			file_name = resource["name"] + resource["type"]
 		
 		# True if resource_source_url is not broken 
-		res = download_file(resource_source_url, file_name)
+		res = download_file(resource_source_url, file_name, resource)
 
 		if res:
 			source_file = open(file_name)
@@ -171,15 +182,18 @@ def handle_update_resource(host, api_key, resource_id):
 				if not handle_missing_hash(host, api_key, resource["id"], source_file):
 					resp = update_resource(host, api_key, resource["id"], file_name)
 					print("Update successful with missing hash? " + str(json.loads(resp.content)["success"]))
+					log_update(resource["id"], resource["name"], datetime.now() + timedelta(hours=hours_offset), "Success", "Success with missing hash")
 			else:
 				comp = compare_file_to_hash(file_name, resource_hash)
 				if not comp:
 					resp = update_resource(host, api_key, resource["id"], file_name)
 					print("Update successful? " + str(json.loads(resp.content)["success"]))
+					log_update(resource["id"], resource["name"], datetime.now() + timedelta(hours=hours_offset), "Success", "")
 				else:
 					print("Hashes match - already latest version, not updating")
 			os.remove(file_name)
-	except KeyError:
+	except KeyError as e:
+		print(e)
 		return False
 
 # Uploads new_file to package
@@ -208,7 +222,7 @@ def update_resource(host, api_key, resource_id, new_file):
 
 # Tries to download file from link, saves to %CWD%/file_name
 # Returns True if link ok, False if link broken
-def download_file(link, file_name):
+def download_file(link, file_name, resource):
 	try:
 		url = urllib2.urlopen(link)
 		f = open(file_name, 'wb')
@@ -225,8 +239,14 @@ def download_file(link, file_name):
 			f.write(buffer)
 		f.close()
 		return True
-	except urllib2.URLError:
-		print("Broken link, abort mission")
+	except urllib2.URLError as e:
+		print(e)
+		log_update(resource["id"], resource["name"], datetime.now() + timedelta(hours=hours_offset), "Fail", e)
+		return False
+
+	except urllib2.HTTPError as e:
+		print(e)
+		log_update(resource["id"], resource["name"], datetime.now() + timedelta(hours=hours_offset), "Fail", e)
 		return False
 
 
