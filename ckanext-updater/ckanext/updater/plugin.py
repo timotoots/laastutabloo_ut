@@ -75,7 +75,7 @@ class CustomController(p.toolkit.BaseController):
 # Writes update info to log
 def log_update(id, name, time, success, details):
 	f = open(update_log_location, "a")
-	log = '{"id": "' + str(id) + '", "name": "' + str(name) + '", "time": "' + str(time) + '", "success": "' + str(success) + '", "details": "' + str(details) + '"}'
+	log = '{"id": "' + str(id) + '", "name": "' + str(name) + '", "time": "' + str(time) + '", "success": "' + str(success) + '", "details": "' + str(details) + '"}\n'
 	f.write(log)
 	f.close()
 	print("Writing to log: " + str(update_log_location))
