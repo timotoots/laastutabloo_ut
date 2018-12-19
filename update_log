@@ -1,0 +1,9 @@
+{"id": "3c0373ac-53ce-4e80-81c7-daa481ba06db", "name": "liiklusjarelevalve_2.csv", "time": "2018-11-20 13:48:53.978236", "success": "Success", "details": ""}
+{"id": "a7df338a-3268-48b4-97f7-c441fdb28392", "name": "liiklve_2.csv", "time": "2018-11-20 13:48:53.978236", "success": "Success", "details": ""}
+{"id": "47b4d476-0819-4bb4-8246-dec576eb2083", "name": "liiklusjarelve_2.csv", "time": "2018-11-20 13:48:53.978236", "success": "Fail", "details": "404 Error"}
+{"id": "3c0373ac-53ce-4e80-81c7-daa481ba06db", "name": "liiklevalve_2.csv", "time": "2018-11-20 13:48:53.978236", "success": "Fail", "details": "Something went horribly wrong"}
+{"id": "3c0373ac-53ce-4e80-81c7-daa481ba06db", "name": "liiklusjarelevalve_2.csv", "time": "2018-11-20 13:48:53.978236", "success": "Success", "details": ""}
+{"id": "3c0373ac-53ce-4e80-81c7-daa481ba06db", "name": "liiklusjarelevalve_2.csv", "time": "2018-11-20 13:48:53.978236", "success": "Success", "details": ""}
+{"id": "3d032f67-cd50-44e0-a6bb-ec32bc935c0c", "name": "linktest.xml", "time": "2018-12-16 18:33:14.536252", "success": "Fail", "details": "File only in filestore, no source url"}
+{"id": "d4754172-1e0e-48ac-98ce-1961d3eab7ed", "name": "broken link test", "time": "2018-12-16 18:33:14.874650", "success": "Fail", "details": "<urlopen error [Errno -2] Name or service not known>"}
+{"id": "d4754172-1e0e-48ac-98ce-1961d3eab7ed", "name": "broken link test", "time": "2018-12-19 08:50:06.621786", "success": "Fail", "details": "<urlopen error [Errno -2] Name or service not known>"}{"id": "43b5eb1a-688f-472d-9a4b-5358eab8965e", "name": "testing again", "time": "2018-12-19 08:51:07.738200", "success": "Success", "details": ""}
