@@ -58,7 +58,7 @@ class UpdaterPlugin(p.SingletonPlugin):
 def update_resource_auth(context, data_dict):
     return {'success': False, 'msg': 'You cant do this. NO!'}
 
-def update_resource(context, data_dict):
+def update_resource_action(context, data_dict):
     p.toolkit.check_access('update_resource', context, data_dict)
     return data_dict
 
